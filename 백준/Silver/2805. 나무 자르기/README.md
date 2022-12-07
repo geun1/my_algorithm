@@ -1,10 +1,10 @@
-# [Silver III] 나무 자르기 - 2805 
+# [Silver II] 나무 자르기 - 2805 
 
 [문제 링크](https://www.acmicpc.net/problem/2805) 
 
 ### 성능 요약
 
-메모리: 148396 KB, 시간: 4932 ms
+메모리: 137012 KB, 시간: 1140 ms
 
 ### 분류
 
