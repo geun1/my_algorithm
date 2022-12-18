@@ -32,7 +32,7 @@ function solution(input) {
       const node = willcheck.pop();
       if (!checked.includes(node)) {
         checked.push(node);
-        willcheck.push(...graph[node].sort((a, b) => b - a));
+        willcheck.push(...graph[node].sort((a, b) => a - b).reverse());
       }
     }
     return checked;
