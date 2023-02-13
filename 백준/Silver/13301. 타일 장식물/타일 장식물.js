@@ -11,11 +11,11 @@ function solution(input) {
   // 4 -> 3 5  16
   // 5 -> 8 5  26
   // 6 -> 8 13 42
-  let n = +input[0];
+  let n = BigInt(input[0]);
 
-  const dp = [4, 6];
+  const dp = [4n, 6n];
   for (let i = 2; i <= n; i++) {
     dp[i] = dp[i - 1] + dp[i - 2];
   }
-  console.log(dp[n - 1]);
+  console.log(dp[n - 1n].toString());
 }
