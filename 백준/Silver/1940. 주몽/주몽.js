@@ -9,18 +9,16 @@ let input = fs.readFileSync(filePath).toString().trim().split("\n");
 
 solution(input);
 function solution(input) {
-    const N = +input.shift();
-    const M = +input.shift();
-    const arr = input
-        .shift()
+    const [N, M] = [+input[0], +input[1]];
+    const arr = input[2]
         .split(" ")
         .map(Number)
         .sort((a, b) => a - b);
     let startIndex = 0;
     let endIndex = N - 1;
     let result = 0;
+
     while (startIndex < endIndex) {
-        // console.log(startIndex, endIndex, sum, arr, result);
         if (arr[startIndex] + arr[endIndex] === M) {
             result++;
             startIndex++;
