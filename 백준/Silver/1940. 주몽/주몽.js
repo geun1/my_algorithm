@@ -19,8 +19,7 @@ function solution(input) {
     let startIndex = 0;
     let endIndex = N - 1;
     let result = 0;
-    while (startIndex !== endIndex) {
-        if (startIndex - 1 === endIndex) break;
+    while (startIndex < endIndex) {
         // console.log(startIndex, endIndex, sum, arr, result);
         if (arr[startIndex] + arr[endIndex] === M) {
             result++;
