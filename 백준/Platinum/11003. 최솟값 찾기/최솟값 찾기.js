@@ -1,78 +1,75 @@
-// 최솟값 찾기
+//문제: Doit_010
+//0. 문제 이해 : 크기가 정해진 구간의 최솟값을 출력해라
+//1. 시간 복잡도 확인: 2.4초 ->2억4천만 연산, 500만개 이중 포문으로 해결할 경우 최대 250만^2 => 6조...ㅋㅋ
+//2. 적용 알고리즘 확인:  슬라이딩 윈도우
+//3. 맞는 자료구조 확인: 순서마다 앞으로 뻬야하고 조건에 맞게 뒤에서 넣고 빼고를 반복해야함으로 deque을 쓰는게 적당할 것으로 파악된다.
 
-'use strict';
-
-const fs = require('fs');
-const PATH = '/dev/stdin';
-const test = './testcase.txt';
-const input = fs
-    .readFileSync(PATH)
-    .toString()
-    .trim()
-    .split('\n')
-    .map((v) => v.split(' ').map((x) => +x));
-
-const [n, l] = input[0];
-const a = input[1];
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const input = fs.readFileSync(filePath).toString().trim().split("\n");
 
 class Deque {
     constructor() {
-        this.front = this.back = undefined;
+        this.arr = [];
+        this.head = 0;
+        this.tail = 0;
     }
-
-    addFront(value) {
-        if (!this.front) this.front = this.back = { value };
-        else this.front = this.front.next = { value, prev: this.front };
+    push_front(item) {
+        if (this.arr[0]) {
+            for (let i = this.arr.length; i > 0; i--) {
+                this.arr[i] = this.arr[i - 1];
+            }
+        }
+        this.arr[this.head] = item;
+        this.tail++;
     }
-
-    removeFront() {
-        let value = this.peekFront();
-        if (this.front === this.back) this.front = this.back = undefined;
-        else (this.front = this.front.prev).next = undefined;
-        return value;
+    push_back(item) {
+        this.arr[this.tail++] = item;
     }
-
-    peekFront() {
-        return this.front && this.front.value;
+    pop_front() {
+        if (this.head >= this.tail) {
+            return null;
+        } else {
+            const result = this.arr[this.head++];
+            return result;
+        }
     }
-
-    addBack(value) {
-        if (!this.front) this.front = this.back = { value };
-        else this.back = this.back.prev = { value, next: this.back };
+    pop_back() {
+        if (this.head >= this.tail) {
+            return null;
+        } else {
+            const result = this.arr[--this.tail];
+            return result;
+        }
     }
-
-    removeBack() {
-        let value = this.peekBack();
-        if (this.front === this.back) this.front = this.back = undefined;
-        else (this.back = this.back.next).back = undefined;
-        return value;
-    }
-
-    peekBack() {
-        return this.back && this.back.value;
-    }
-}
-
-const queue = new Deque(l);
-
-let answer = '';
-
-for (let i = 0; i < n; i++) {
-    if (queue.peekFront() < i - l + 1) {
-        queue.removeFront();
-    }
-
-    while (a[queue.peekBack()] >= a[i]) {
-        queue.removeBack();
-    }
-
-    queue.addBack(i);
-
-    answer += a[queue.peekFront()] + ' ';
-    if (i % 10000 === 0) {
-        process.stdout.write(answer);
-        answer = '';
+    isEmpty() {
+        return this.head >= this.tail;
     }
 }
 
-console.log(answer.trimEnd());
+solution(input);
+function solution(input) {
+    const [N, L] = input.shift().split(" ").map(Number);
+    const arr = input.shift().split(" ").map(Number);
+
+    let answer = "";
+    const deque = new Deque(); // 연결리스트 deque으로 구현해야한다. 배열로 구현했다가 pop_front()가 O(N)이라 시간초과 걸려서 개빡침    pop_front O(N)으로 할 수 있는 연결리스트로 새로 구현
+
+    arr.forEach((e, idx) => {
+        // 값 하나하나씩 e는 값 idx는 인덱스
+        // console.log(deque);
+        if (!deque.isEmpty() && deque.arr[deque.head][1] < idx - L + 1) {
+            deque.pop_front(); // deque이 비어있지 않고 맨 앞 값의 인덱스가 빠질 순서ㄱ라면 popfront한다
+        }
+        while (!deque.isEmpty() && deque.arr[deque.tail - 1][0] > e) {
+            deque.pop_back(); // deque에 넣을 때 deque의 tail값이 넣을 값보다 크면 다 빼준다.
+        }
+        deque.push_back([e, idx]); // 그 뒤에 넣어준다.
+        answer += deque.arr[deque.head][0] + " "; // 매번 head값이 최솟값
+        if (idx % 10000 === 0) {
+            process.stdout.write(answer);
+            answer = "";
+        }
+    });
+    console.log(answer.trim());
+}
