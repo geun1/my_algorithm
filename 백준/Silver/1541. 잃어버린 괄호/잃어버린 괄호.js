@@ -5,15 +5,15 @@ let input = fs.readFileSync(filePath).toString().trim();
 solution(input);
 
 function solution(input) {
-  let data = input.split("-");
-  let result = 0;
-  let data1 = data.map((v) => v.split("+").map((v) => +v));
-  for (let i = 0; i < data1.length; i++) {
-    data1[i] = data1[i].reduce((a, b) => a + b, 0);
-  }
-  data1.length > 1
-    ? (result = data1.reduce((a, b) => a - b, data1[0] * 2))
-    : (result = data1[0]);
+    const DATA = input.split("-");
+    let result = 0;
+    const REAL_DATA = DATA.map((v) => v.split("+").map(Number));
+    for (let i = 0; i < REAL_DATA.length; i++) {
+        REAL_DATA[i] = REAL_DATA[i].reduce((acc, now) => acc + now, 0);
+    }
+    REAL_DATA.length > 1
+        ? (result = REAL_DATA.reduce((acc, now) => acc - now, REAL_DATA[0] * 2))
+        : (result = REAL_DATA[0]);
 
-  console.log(result);
+    console.log(result);
 }
