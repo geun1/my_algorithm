@@ -3,9 +3,7 @@ const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 let input = fs.readFileSync(filePath).toString().trim().split("\n");
 
 solution(input);
-function sum(arr) {
-  return arr.reduce((a, b) => a + b, -arr[0]);
-}
+
 function solution(input) {
   const [n, w, L] = input[0].split(" ").map((e) => e * 1);
   // n 개의 트럭 , 다리길이 w, 다리의 최대하중 L
@@ -14,7 +12,7 @@ function solution(input) {
   let answer = 0;
   //   console.log(deque, truck, answer);
   while (true) {
-    if (sum(deque) + truck[0] > L) {
+    if (deque.reduce((a, b) => a + b, -deque[0]) + truck[0] > L) {
       deque.shift();
       deque.push(0);
       answer += 1;
