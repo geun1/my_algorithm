@@ -5,26 +5,26 @@ let input = fs.readFileSync(filePath).toString().trim().split("\n");
 solution(input);
 
 function solution(input) {
-  const [n, w, L] = input[0].split(" ").map((e) => e * 1);
-  // n 개의 트럭 , 다리길이 w, 다리의 최대하중 L
-  const truck = input[1].split(" ").map((e) => e * 1);
-  const deque = new Array(w).fill(0);
-  let answer = 0;
-  //   console.log(deque, truck, answer);
-  while (true) {
-    if (deque.reduce((a, b) => a + b, -deque[0]) + truck[0] > L) {
-      deque.shift();
-      deque.push(0);
-      answer += 1;
-    } else {
-      deque.shift();
-      temp = truck.shift();
-      deque.push(temp === undefined ? 0 : temp);
-      answer += 1;
-    }
-    if (deque.reduce((a, b) => a + b, 0) === 0) break;
+  const [n, w, L] = input[0].split(" ").map(Number); // Number로 변환
+  const trucks = input[1].split(" ").map(Number);
+  const bridge = new Array(w).fill(0);
+  let totalWeightOnBridge = 0;
+  let time = 0;
 
-    // console.log(deque, truck, answer);
+  while (trucks.length > 0 || totalWeightOnBridge > 0) {
+    totalWeightOnBridge -= bridge.shift(); // 다리를 빠져나가는 트럭의 무게를 뺌
+    if (trucks.length > 0) {
+      if (totalWeightOnBridge + trucks[0] <= L) {
+        let truck = trucks.shift();
+        bridge.push(truck);
+        totalWeightOnBridge += truck;
+      } else {
+        bridge.push(0); // 다리에 트럭을 추가하지 않고, 시간만 증가시킴
+      }
+    } else {
+      bridge.push(0); // 남은 트럭이 없으면 0을 추가
+    }
+    time++;
   }
-  console.log(answer);
+  console.log(time);
 }
